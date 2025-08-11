@@ -1,0 +1,1 @@
+{"learning_rate": 0.01, "epochs": 50, "batch_size": 32, "n_classes_": 8, "classes_": [0, 1, 2, 3, 4, 5, 6, 7]}
