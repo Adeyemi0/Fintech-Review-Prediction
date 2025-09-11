@@ -1,225 +1,327 @@
-from flask import Flask, request, jsonify, render_template_string
-import joblib
+import os
 import json
+import joblib
+import torch
+import numpy as np
+from flask import Flask, request, render_template_string, jsonify
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 app = Flask(__name__)
 
-# Load models and vectorizer once when the app starts
-vectorizer_path = r"C:model\vectorizer.pkl"
-model_path = r"model\models.pkl"
-metadata_path = r"model\metadata.json"
+# -----------------------
+# Load artifacts
+# -----------------------
+SAVE_DIR = "./model"
 
-vectorizer = joblib.load(vectorizer_path)
-loaded_models = joblib.load(model_path)
-model = loaded_models['enhanced_rf']
+try:
+    # Load model & tokenizer
+    tokenizer = AutoTokenizer.from_pretrained(SAVE_DIR)
+    model = AutoModelForSequenceClassification.from_pretrained(SAVE_DIR)
+    model.eval()
+    DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+    model.to(DEVICE)
+    
+    # Load MultiLabelBinarizer and labels
+    mlb = joblib.load(os.path.join(SAVE_DIR, "mlb.joblib"))
+    with open(os.path.join(SAVE_DIR, "labels.json"), "r", encoding="utf-8") as f:
+        labels = json.load(f)
+    
+    MODEL_LOADED = True
+    print(f"Model loaded successfully on device: {DEVICE}")
+    print(f"Available labels: {labels}")
+    
+except Exception as e:
+    MODEL_LOADED = False
+    print(f"Error loading model: {e}")
+    tokenizer = None
+    model = None
+    mlb = None
+    labels = []
 
-with open(metadata_path, 'r') as f:
-    metadata = json.load(f)
+# Sigmoid for probabilities
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
 
-label_mapping = {i: cat for i, cat in enumerate(metadata['classes'])}
+# -----------------------
+# Prediction function (single text only)
+# -----------------------
+def predict_single(text, threshold=0.5):
+    """Predict categories for a single text."""
+    if not MODEL_LOADED:
+        return [], []
+    
+    # Tokenize
+    encodings = tokenizer(
+        [text],  # Wrap in list since model expects batch
+        truncation=True,
+        padding=True,
+        max_length=256,
+        return_tensors="pt"
+    ).to(DEVICE)
+    
+    # Forward pass
+    with torch.no_grad():
+        outputs = model(**encodings)
+        logits = outputs.logits.cpu().numpy()
+    
+    # Convert to probabilities
+    probs = sigmoid(logits)
+    
+    # Apply fixed threshold (0.5)
+    pred_bin = (probs >= threshold).astype(int)
+    
+    # Decode to label names
+    row_2d = np.array([pred_bin[0]])
+    categories = mlb.inverse_transform(row_2d)[0]
+    
+    return list(categories), probs[0]
 
-# HTML template with embedded CSS and footer credit added
-HTML_TEMPLATE = '''
+# HTML Template with embedded CSS + LinkedIn Footer
+HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Text Category Classifier</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fintech Review Category Classifier</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
         }
-        
+
         .container {
-            background: white;
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            animation: slideUp 0.6s ease-out;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            flex: 1;
         }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
+
         .header {
+            background: linear-gradient(45deg, #2c3e50, #4a6741);
+            color: white;
+            padding: 30px;
             text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
             margin-bottom: 30px;
         }
-        
-        .header h1 {
-            color: #333;
-            font-size: 2.2em;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-        
+
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
             color: #333;
+            font-size: 1.1em;
         }
-        
+
         textarea {
             width: 100%;
+            min-height: 120px;
             padding: 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             font-size: 16px;
             font-family: inherit;
             resize: vertical;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
-        
+
         textarea:focus {
-            outline: none;
             border-color: #667eea;
+            outline: none;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-        
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 15px 30px;
             font-size: 16px;
             font-weight: 600;
-            border-radius: 12px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
-        
+
         .btn:active {
             transform: translateY(0);
         }
-        
+
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
-        
-        .result {
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            animation: fadeIn 0.5s ease-out;
+
+        .results-section {
+            margin-top: 30px;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        .result-card {
+            background: #f8f9ff;
+            border: 1px solid #e0e8ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
-        
-        .result.success {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+
+        .original-text {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #555;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-tag {
+            background: linear-gradient(45deg, #48bb78, #38a169);
             color: white;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(72, 187, 120, 0.3);
         }
-        
-        .result.error {
-            background: linear-gradient(135deg, #f44336, #d32f2f);
-            color: white;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+
+        .no-categories {
+            color: #666;
+            font-style: italic;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 8px;
         }
-        
+
         .loading {
             display: none;
             text-align: center;
-            margin-top: 20px;
+            padding: 20px;
+            color: #667eea;
+            font-size: 18px;
         }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+
+        .loading.show {
+            display: block;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .error {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #c53030;
         }
-        
-        .example-text {
-            font-size: 14px;
-            color: #888;
-            font-style: italic;
-            margin-top: 5px;
+
+        .model-status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
         }
-        
-        .footer {
-            margin-top: 30px;
+
+        .model-status.loaded {
+            background: #c6f6d5;
+            color: #22543d;
+            border-left: 4px solid #38a169;
+        }
+
+        .model-status.error {
+            background: #fed7d7;
+            color: #c53030;
+            border-left: 4px solid #c53030;
+        }
+
+        footer {
             text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: #ecf0f1;
             font-size: 14px;
-            color: #eee;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top: auto;
         }
-        .footer a {
-            color: #a3bffa;
+
+        footer a {
+            color: #667eea;
             text-decoration: none;
             font-weight: 600;
         }
-        .footer a:hover {
+
+        footer a:hover {
             text-decoration: underline;
         }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 25px;
-                margin: 10px;
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
             }
             
-            .header h1 {
-                font-size: 1.8em;
+            .main-content {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
@@ -227,136 +329,192 @@ HTML_TEMPLATE = '''
 <body>
     <div class="container">
         <div class="header">
-            <h1>Review Classifier</h1>
-            <p>Enter your text below and discover its category</p>
+            <h1>🏦 Fintech Review Classifier</h1>
+            <p>Classify your customer review into relevant categories</p>
         </div>
         
-        <form id="classifyForm">
-            <div class="form-group">
-                <label for="textInput">Enter your text or review:</label>
-                <textarea 
-                    id="textInput" 
-                    name="text" 
-                    rows="6" 
-                    placeholder="Paste or type your text here..."
-                    required
-                ></textarea>
-                <div class="example-text">
-                    Example: "Good app, does what it says it does, but recently, there's been a very disturbing downtime. It could take days to log in to access your funds."
+        <div class="main-content">
+            {% if model_loaded %}
+                <div class="model-status loaded">
+                    ✅ Model loaded successfully! Available categories: {{ labels|length }}
                 </div>
+            {% else %}
+                <div class="model-status error">
+                    ❌ Model could not be loaded. Please check if the model files exist in './model' directory.
+                </div>
+            {% endif %}
+            
+            <form id="classifyForm" {% if not model_loaded %}style="opacity: 0.5; pointer-events: none;"{% endif %}>
+                <div class="input-section">
+                    <div class="form-group">
+                        <label for="review_text">Enter Customer Review:</label>
+                        <textarea id="review_text" name="review_text" placeholder="Type a single customer review here..." required>{{ sample_text if sample_text else 'The app crashes every time I try to open it.' }}</textarea>
+                    </div>
+                    
+                    <div class="controls">
+                        <button type="submit" class="btn" {% if not model_loaded %}disabled{% endif %}>
+                            🔍 Classify Review
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div>🤖 Analyzing review...</div>
             </div>
             
-            <button type="submit" class="btn" id="submitBtn">
-                Classify Text
-            </button>
-        </form>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Analyzing text...</p>
+            <div class="results-section" id="results" style="display: none;">
+                <!-- Results will be inserted here -->
+            </div>
         </div>
-        
-        <div id="result"></div>
     </div>
 
-    <div class="footer">
-        Created by Adediran Adeyemi. Connect with me on 
-        <a href="https://www.linkedin.com/in/adediran-adeyemi-17103b114/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.
-    </div>
+    <footer>
+        Made with ❤️ by Adediran Adeyemi — <a href="https://www.linkedin.com/in/adediran-adeyemi-17103b114/" target="_blank">Connect with me on LinkedIn</a>
+    </footer>
 
     <script>
+        // Handle form submission
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const textInput = document.getElementById('textInput');
-            const submitBtn = document.getElementById('submitBtn');
+            const formData = new FormData(this);
             const loading = document.getElementById('loading');
-            const result = document.getElementById('result');
+            const results = document.getElementById('results');
             
-            const text = textInput.value.trim();
-            
-            if (!text) {
-                showResult('Please enter some text to classify.', 'error');
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Analyzing...';
-            loading.style.display = 'block';
-            result.innerHTML = '';
+            // Show loading, hide results
+            loading.classList.add('show');
+            results.style.display = 'none';
             
             try {
                 const response = await fetch('/predict', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: text })
+                    body: formData
                 });
                 
                 const data = await response.json();
                 
-                if (response.ok) {
-                    showResult(`Category: ${data.category}`, 'success');
-                } else {
-                    showResult(`Error: ${data.error}`, 'error');
+                if (data.error) {
+                    throw new Error(data.error);
                 }
                 
+                displayResults(data);
+                
             } catch (error) {
-                showResult('Network error. Please try again.', 'error');
+                results.innerHTML = '<div class="error">❌ Error: ' + error.message + '</div>';
+                results.style.display = 'block';
             } finally {
-                // Reset loading state
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Classify Text';
-                loading.style.display = 'none';
+                loading.classList.remove('show');
             }
         });
-        
-        function showResult(message, type) {
-            const result = document.getElementById('result');
-            result.innerHTML = message;
-            result.className = `result ${type}`;
+
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            
+            // Clear any existing content completely
+            results.innerHTML = '';
+            
+            // Create results header
+            const header = document.createElement('h2');
+            header.textContent = '🎯 Classification Result';
+            results.appendChild(header);
+            
+            // Only one result expected
+            const result = data.results[0];
+            const card = document.createElement('div');
+            card.className = 'result-card';
+            
+            // Original text section
+            const textDiv = document.createElement('div');
+            textDiv.className = 'original-text';
+            textDiv.innerHTML = `<strong>Review:</strong> "${result.text}"`;
+            card.appendChild(textDiv);
+            
+            // Categories section
+            const categoriesDiv = document.createElement('div');
+            categoriesDiv.className = 'categories';
+            
+            if (result.categories.length > 0) {
+                result.categories.forEach(cat => {
+                    const tag = document.createElement('span');
+                    tag.className = 'category-tag';
+                    tag.textContent = cat;
+                    categoriesDiv.appendChild(tag);
+                });
+            } else {
+                const noCategories = document.createElement('div');
+                noCategories.className = 'no-categories';
+                noCategories.textContent = 'No categories above threshold';
+                categoriesDiv.appendChild(noCategories);
+            }
+            card.appendChild(categoriesDiv);
+            
+            results.appendChild(card);
+            results.style.display = 'block';
         }
-        
-        // Auto-resize textarea
-        document.getElementById('textInput').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-        });
     </script>
 </body>
 </html>
-'''
+"""
 
 @app.route('/')
-def home():
-    return render_template_string(HTML_TEMPLATE)
+def index():
+    return render_template_string(
+        HTML_TEMPLATE,
+        model_loaded=MODEL_LOADED,
+        labels=labels,
+        sample_text=""
+    )
 
 @app.route('/predict', methods=['POST'])
-def predict():
+def predict_route():
+    if not MODEL_LOADED:
+        return jsonify({'error': 'Model not loaded. Please check model files.'}), 500
+    
     try:
-        data = request.get_json()
-        if not data or 'text' not in data:
-            return jsonify({'error': 'No text provided'}), 400
+        review_text = request.form.get('review_text', '').strip()
         
-        user_text = data['text'].strip()
-        if not user_text:
-            return jsonify({'error': 'Text cannot be empty'}), 400
+        if not review_text:
+            return jsonify({'error': 'Please enter a review.'}), 400
         
-        # Vectorize input text
-        X = vectorizer.transform([user_text])
+        # Predict for SINGLE review only
+        categories, _ = predict_single(review_text, threshold=0.5)
         
-        # Predict label
-        pred_label = model.predict(X)[0]
+        # Format result (only one result object)
+        result = {
+            'text': review_text,
+            'categories': categories
+        }
         
-        # Map label to category
-        category = label_mapping.get(pred_label, "Unknown")
-        
-        return jsonify({'category': category})
+        return jsonify({
+            'success': True,
+            'results': [result],  # Still wrapped in list for frontend compatibility
+            'threshold': 0.5
+        })
         
     except Exception as e:
-        return jsonify({'error': f'Prediction failed: {str(e)}'}), 500
+        return jsonify({'error': f'Prediction error: {str(e)}'}), 500
+
+@app.route('/health')
+def health():
+    return jsonify({
+        'status': 'healthy',
+        'model_loaded': MODEL_LOADED,
+        'device': DEVICE if MODEL_LOADED else 'N/A',
+        'labels_count': len(labels) if labels else 0
+    })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    print("="*50)
+    print("🚀 Starting Fintech Review Classification App")
+    print("="*50)
+    if MODEL_LOADED:
+        print(f"✅ Model loaded successfully on {DEVICE}")
+        print(f"📋 Available categories: {len(labels)}")
+        print(f"🏷️  Categories: {', '.join(labels[:5])}{'...' if len(labels) > 5 else ''}")
+    else:
+        print("❌ Model failed to load - app will run in demo mode")
+    print("🌐 Open your browser to: http://localhost:5000")
+    print("="*50)
+    
+    app.run(host='0.0.0.0', port=5000)
