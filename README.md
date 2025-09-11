@@ -2,6 +2,9 @@
 
 A RoBERTa-based transformer model for automatic categorization of customer reviews into multiple labels simultaneously. The model achieved 93.7% F1-micro score on the test set, making it highly effective for real-world review classification tasks.
 
+## Flask Demo
+![Flask Demo](flask.gif)
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -45,7 +48,7 @@ This model automatically categorizes customer reviews into multiple relevant cat
 ## Dataset
 
 - **Total Reviews**: 29,000+ customer reviews
-- **Data Source**: Labeled using DeepSeek for consistent categorization
+- **Data Source**: Data was scrapped from Moniepoint Playstore reviews and Labeled using DeepSeek for consistent categorization
 - **Preprocessing**: Comprehensive data cleaning and label standardization
 - **Split Strategy**: Temporal split with cutoff date of September 1, 2025
 - **Labels**: Multiple categories per review supported
