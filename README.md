@@ -45,7 +45,7 @@ This model automatically categorizes customer reviews into multiple relevant cat
 ## Dataset
 
 - **Total Reviews**: 29,000+ customer reviews
-- **Data Source**: Labeled using DeepSeek for consistent categorization
+- **Data Source**: Sourced from Moniepoint Customer Review (playstore) and Labeled using DeepSeek for consistent categorization
 - **Preprocessing**: Comprehensive data cleaning and label standardization
 - **Split Strategy**: Temporal split with cutoff date of September 1, 2025
 - **Labels**: Multiple categories per review supported
