@@ -2,6 +2,9 @@
 
 A RoBERTa-based transformer model for automatic categorization of customer reviews into multiple labels simultaneously. The model achieved 93.7% F1-micro score on the test set, making it highly effective for real-world review classification tasks.
 
+## Flask Demo
+![Route Planning Demo](rout_flask.gif)
+
 ## Table of Contents
 
 - [Overview](#overview)
