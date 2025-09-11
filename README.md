@@ -2,9 +2,6 @@
 
 A RoBERTa-based transformer model for automatic categorization of customer reviews into multiple labels simultaneously. The model achieved 93.7% F1-micro score on the test set, making it highly effective for real-world review classification tasks.
 
-## Flask Demo
-![Flask Demo](flask_moniepoint_gif.gif)
-
 ## Table of Contents
 
 - [Overview](#overview)
@@ -48,7 +45,7 @@ This model automatically categorizes customer reviews into multiple relevant cat
 ## Dataset
 
 - **Total Reviews**: 29,000+ customer reviews
-- **Data Source**: Sourced from Moniepoint Customer Review (playstore) and Labeled using DeepSeek for consistent categorization
+- **Data Source**: Labeled using DeepSeek for consistent categorization
 - **Preprocessing**: Comprehensive data cleaning and label standardization
 - **Split Strategy**: Temporal split with cutoff date of September 1, 2025
 - **Labels**: Multiple categories per review supported
@@ -266,4 +263,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Model Card**: [adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/adeyemi001/Multi-Labelled-Review-Categorization-Model)
 
-**Contact**: For questions or support, please open an issue on the GitHub repository.
+**Contact**: For questions, collaborations, or support, please reach out on [LinkedIn](https://www.linkedin.com/in/adediran-adeyemi-17103b114/) or open an issue on the GitHub repository.
