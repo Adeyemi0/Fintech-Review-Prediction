@@ -9,25 +9,26 @@
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
-2. [Project Overview](#project-overview)
-3. [Technical Innovation: AI Model Development](#technical-innovation-ai-model-development)
+2. [Review Categories](#review-categories)
+3. [Project Overview](#project-overview)
+4. [Technical Innovation: AI Model Development](#technical-innovation-ai-model-development)
    - [Model Architecture](#model-architecture)
    - [Performance Metrics](#performance-metrics)
    - [Training & Validation](#training--validation)
-4. [Model Deployment & Access](#model-deployment--access)
+5. [Model Deployment & Access](#model-deployment--access)
    - [Live Interactive Demo](#live-interactive-demo)
    - [Hugging Face Repository](#hugging-face-repository)
    - [Usage Instructions](#usage-instructions)
    - [API Integration](#api-integration)
-5. [Business Intelligence Analysis](#business-intelligence-analysis)
+6. [Business Intelligence Analysis](#business-intelligence-analysis)
    - [Customer Engagement Insights](#customer-engagement-insights)
    - [Critical Issues Identification](#critical-issues-identification)
    - [Competitive Advantages](#competitive-advantages)
-6. [Strategic Recommendations for Moniepoint](#strategic-recommendations-for-moniepoint)
-7. [Technical Implementation Details](#technical-implementation-details)
-8. [Results & Insights](#results--insights)
-9. [Future Work & Extensions](#future-work--extensions)
-10. [Conclusion](#conclusion)
+7. [Strategic Recommendations for Moniepoint](#strategic-recommendations-for-moniepoint)
+8. [Technical Implementation Details](#technical-implementation-details)
+9. [Results & Insights](#results--insights)
+10. [Future Work & Extensions](#future-work--extensions)
+11. [Conclusion](#conclusion)
 
 ---
 
@@ -47,6 +48,37 @@ This personal project presents analysis of **Moniepoint's personal banking app**
 - Critical technical issues requiring immediate attention (417 combined mentions)
 - Speed and reliability as core competitive advantages (857+ positive mentions)
 - Consistent positive sentiment trend since August 2023
+
+---
+
+## Review Categories
+
+The model classifies customer reviews into **16 distinct categories** that capture the full spectrum of user feedback and issues:
+
+### Category List
+
+1. **Account Registration** - Issues and feedback related to creating new accounts
+2. **App Installation Issues** - Problems encountered during app download or installation
+3. **App crashes or Slow** - Performance issues including crashes and slow response times
+4. **App not Opening** - Critical failures where the app fails to launch
+5. **Customer Inquiry** - General questions and information requests
+6. **Customer Support** - Feedback about customer service interactions
+7. **Failed Transaction** - Transaction failures and processing errors
+8. **Feature Requests/Service Suggestion** - User suggestions for new features or improvements
+9. **General Feedback** - Overall opinions and experiences with the app
+10. **Login & Account Access** - Authentication and account access problems
+11. **Network Failure** - Connectivity and network-related issues
+12. **Other** - Miscellaneous feedback not fitting other categories
+13. **Password Issues** - Password reset, recovery, and related problems
+14. **Transaction Charges** - Concerns about fees and transaction costs
+15. **UI/UX** - User interface and user experience feedback
+16. **USSD Issues** - Problems with USSD code functionality
+
+### Multi-Label Classification
+
+The model uses **multi-label classification**, meaning a single review can be assigned to multiple categories simultaneously. For example, a review stating *"The app is slow and charges are too high"* would be classified under both **"App crashes or Slow"** and **"Transaction Charges"**.
+
+This approach provides more nuanced insights into customer feedback, as many reviews contain multiple concerns or topics.
 
 ---
 
@@ -607,6 +639,4 @@ This project showcases the intersection of advanced machine learning techniques 
 
 **Project Author**: Adediran Adeyemi  
 **Completion Date**: September 2025  
-**Flask Demo**: Available in project repository  
-
-**Keywords**: Natural Language Processing, Multi-label Classification, RoBERTa, Fintech Analysis, Customer Experience, Business Intelligence, Machine Learning, Transformer Models, Hugging Face, Python
+**Flask Demo**: Available in project repository
