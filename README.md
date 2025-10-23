@@ -1,5 +1,8 @@
 # Analysis of Moniepoint Banking App Reviews
 
+## Live Demo
+🚀 **Try the model now**: [Interactive Demo on Hugging Face Spaces](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+
 ## Flask Demo
 ![Flask Demo](fldemo.gif)
 
@@ -12,6 +15,7 @@
    - [Performance Metrics](#performance-metrics)
    - [Training & Validation](#training--validation)
 4. [Model Deployment & Access](#model-deployment--access)
+   - [Live Interactive Demo](#live-interactive-demo)
    - [Hugging Face Repository](#hugging-face-repository)
    - [Usage Instructions](#usage-instructions)
    - [API Integration](#api-integration)
@@ -34,7 +38,7 @@ This personal project presents a comprehensive AI-driven analysis of **Moniepoin
 **Key Achievements:**
 - **Developed Custom AI Model**: RoBERTa-based multi-label classifier achieving **93.7% F1-micro accuracy**
 - **Analyzed 29,000+ Reviews**: Comprehensive dataset spanning multiple years of customer feedback
-- **Deployed Production Model**: Publicly accessible via Hugging Face Hub for real-time predictions
+- **Deployed Production Model**: Publicly accessible via Hugging Face Hub and interactive web demo
 - **Generated Business Insights**: Identified critical operational issues and competitive advantages
 - **Created Actionable Intelligence**: Data-driven recommendations for product improvement
 
@@ -117,9 +121,26 @@ The model achieved exceptional performance on the held-out test set:
 
 ## Model Deployment & Access
 
+### Live Interactive Demo
+
+🎯 **Try it now**: [https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+
+The interactive demo provides:
+- **Real-time Predictions**: Instant review categorization
+- **User-Friendly Interface**: Simple text input for immediate results
+- **Visual Feedback**: Clear category labels with confidence scores
+- **Example Reviews**: Pre-loaded samples to test the model
+- **No Setup Required**: Browser-based access with zero configuration
+
+**Perfect for:**
+- Quick model evaluation and testing
+- Understanding model capabilities
+- Demonstrating the project to stakeholders
+- Educational purposes and learning
+
 ### Hugging Face Repository
 
-**Repository**: [adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+**Model Repository**: [adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/adeyemi001/Multi-Labelled-Review-Categorization-Model)
 
 **Model Files Structure:**
 ```
@@ -582,13 +603,13 @@ def analyze_with_confidence_levels(reviews):
 
 ## Conclusion
 
-This project demonstrates the practical application of  NLP techniques to real-world business intelligence challenges. The project provides actionable insights for Moniepoint's customer experience optimization.
+This project demonstrates the practical application of NLP techniques to real-world business intelligence challenges. The project provides actionable insights for Moniepoint's customer experience optimization.
 
 ### Key Achievements
 
 **Technical Excellence:**
 - **93.7% F1-Micro Accuracy**: Demonstrates mastery of transformer-based architectures
-- **Production Deployment**: Successfully deployed model to Hugging Face Hub for public access
+- **Production Deployment**: Successfully deployed model to Hugging Face Hub and interactive Spaces demo
 - **End-to-End Pipeline**: Complete solution from data collection to actionable insights
 - **Reproducible Research**: Open-source model enabling further research and applications
 
@@ -612,10 +633,14 @@ The project represents a complete data science lifecycle implementation, from pr
 
 ---
 
+## Project Links
+
+- 🚀 **Live Demo**: [Interactive Spaces Demo](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+- 🤗 **Model Repository**: [Hugging Face Model Hub](https://huggingface.co/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+- 💼 **LinkedIn**: [Adediran Adeyemi](https://www.linkedin.com/in/adediran-adeyemi-17103b114/)
+
 **Project Author**: Adediran Adeyemi  
 **Completion Date**: September 2025  
-**Model Repository**: [adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/adeyemi001/Multi-Labelled-Review-Categorization-Model)  
-**Contact**: [LinkedIn Profile](https://www.linkedin.com/in/adediran-adeyemi-17103b114/)  
 **Flask Demo**: Available in project repository  
 
 **Keywords**: Natural Language Processing, Multi-label Classification, RoBERTa, Fintech Analysis, Customer Experience, Business Intelligence, Machine Learning, Transformer Models, Hugging Face, Python
