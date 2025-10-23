@@ -33,7 +33,7 @@
 
 ## Executive Summary
 
-This personal project presents a comprehensive AI-driven analysis of **Moniepoint's personal banking app** through advanced machine learning techniques applied to customer reviews scraped from Google Play Store. The project demonstrates the power of modern NLP techniques in extracting actionable business intelligence from unstructured customer feedback.
+This personal project presents analysis of **Moniepoint's personal banking app** through advanced machine learning techniques applied to customer reviews scraped from Google Play Store. 
 
 **Key Achievements:**
 - **Developed Custom AI Model**: RoBERTa-based multi-label classifier achieving **93.7% F1-micro accuracy**
@@ -53,9 +53,9 @@ This personal project presents a comprehensive AI-driven analysis of **Moniepoin
 ## Project Overview
 
 ### Motivation
-This project was undertaken to demonstrate the practical application of advanced NLP techniques in fintech customer experience analysis. By analyzing real customer feedback from Moniepoint's banking app, the goal was to:
+This project was undertaken to demonstrate the practical application of advanced NLP techniques in fintech customer experience analysis. My goal was to:
 
-1. Build a state-of-the-art multi-label text classification system
+1. Build a multi-label text classification system
 2. Extract meaningful business insights from unstructured review data
 3. Provide actionable recommendations based on AI-driven analysis
 4. Create a reusable model for similar applications
@@ -123,20 +123,8 @@ The model achieved exceptional performance on the held-out test set:
 
 ### Live Interactive Demo
 
-🎯 **Try it now**: [https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+**Try it now**: [https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
 
-The interactive demo provides:
-- **Real-time Predictions**: Instant review categorization
-- **User-Friendly Interface**: Simple text input for immediate results
-- **Visual Feedback**: Clear category labels with confidence scores
-- **Example Reviews**: Pre-loaded samples to test the model
-- **No Setup Required**: Browser-based access with zero configuration
-
-**Perfect for:**
-- Quick model evaluation and testing
-- Understanding model capabilities
-- Demonstrating the project to stakeholders
-- Educational purposes and learning
 
 ### Hugging Face Repository
 
@@ -374,7 +362,7 @@ def analyze_with_confidence_levels(reviews):
 
 ### Competitive Advantages
 
-**AI-Identified Strengths (High Positive Sentiment):**
+**Identified Strengths (High Positive Sentiment):**
 
 #### Core Differentiators
 1. **Fast Transactions** - 297 mentions
@@ -591,37 +579,15 @@ def analyze_with_confidence_levels(reviews):
 3. **Marketing Intelligence**: Campaign effectiveness measurement
 4. **Quality Assurance**: Automated release impact assessment
 
-### Research Directions
-
-**Academic Contributions:**
-1. **Multi-label Fintech Classification**: Domain-specific methodology papers
-2. **Temporal Sentiment Analysis**: Time-series customer satisfaction modeling
-3. **Cross-Platform Analysis**: Multi-app store comparison techniques
-4. **Explainable AI**: Interpretable customer feedback analysis
-
----
 
 ## Conclusion
 
-This project demonstrates the practical application of NLP techniques to real-world business intelligence challenges. The project provides actionable insights for Moniepoint's customer experience optimization.
-
-### Key Achievements
-
-**Technical Excellence:**
-- **93.7% F1-Micro Accuracy**: Demonstrates mastery of transformer-based architectures
-- **Production Deployment**: Successfully deployed model to Hugging Face Hub and interactive Spaces demo
-- **End-to-End Pipeline**: Complete solution from data collection to actionable insights
-- **Reproducible Research**: Open-source model enabling further research and applications
-
-**Business Impact:**
-- **Actionable Intelligence**: Clear prioritization of 417 critical technical issues
-- **Competitive Advantage**: Identification of 857 speed-related positive mentions as key differentiator
-- **Strategic Framework**: Data-driven recommendations for product development and customer service
-- **Risk Assessment**: Quantified customer churn risks and mitigation strategies
+This project demonstrates the practical application of NLP techniques to real-world business intelligence challenges. 
+The project provides actionable insights for Moniepoint's customer experience optimization.
 
 ### Project Significance
 
-This project showcases the intersection of advanced machine learning techniques and practical business applications. The ability to extract meaningful insights from unstructured customer feedback demonstrates the value of AI-driven analysis in modern business intelligence.
+This project showcases the intersection of advanced machine learning techniques and practical business applications. The ability to extract meaningful insights from unstructured customer feedback.
 
 **For Moniepoint**: The analysis provides a comprehensive roadmap for addressing customer concerns while leveraging existing competitive advantages.
 
@@ -629,7 +595,7 @@ This project showcases the intersection of advanced machine learning techniques 
 
 **For Future Applications**: The methodology and tools developed can be adapted for similar customer feedback analysis across various industries and platforms.
 
-The project represents a complete data science lifecycle implementation, from problem identification through model deployment and business intelligence generation, demonstrating both technical proficiency and practical business acumen.
+
 
 ---
 
