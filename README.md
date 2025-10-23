@@ -57,7 +57,7 @@ This project was undertaken to demonstrate the practical application of advanced
 
 1. Build a multi-label text classification system
 2. Extract meaningful business insights from unstructured review data
-3. Provide actionable recommendations based on AI-driven analysis
+3. Provide actionable recommendations based on the analysis
 4. Create a reusable model for similar applications
 
 ### Data Collection & Scope
