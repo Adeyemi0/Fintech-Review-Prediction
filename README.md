@@ -6,6 +6,19 @@
 ## Flask Demo
 ![Flask Demo](fldemo.gif)
 
+## Power BI Dashboard
+📊 **Interactive Analytics Dashboard**: [View Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiYjk1YWM3YmYtYWU5ZS00YjIxLWIwMmQtMWI0YjI2ZjQ2MWM3IiwidCI6IjQyOWYxMWVhLWM3NmQtNDczMS05M2M5LWM0MDZiNGYzMmE1YSJ9)
+
+![Power BI Dashboard](page1.jpg)
+
+The dashboard provides comprehensive visual analytics including:
+- Review volume trends over time
+- Sentiment distribution analysis
+- Category breakdown and frequency
+- Customer service response metrics
+- Key performance indicators (KPIs)
+- Interactive filters for deep-dive analysis
+
 ## Table of Contents
 
 1. [Executive Summary](#executive-summary)
@@ -40,6 +53,7 @@ This personal project presents analysis of **Moniepoint's personal banking app**
 - **Developed Custom AI Model**: RoBERTa-based multi-label classifier achieving **93.7% F1-micro accuracy**
 - **Analyzed 29,000+ Reviews**: Comprehensive dataset spanning multiple years of customer feedback
 - **Deployed Production Model**: Publicly accessible via Hugging Face Hub and interactive web demo
+- **Created Interactive Dashboard**: Power BI analytics dashboard for visual insights
 - **Generated Business Insights**: Identified critical operational issues and competitive advantages
 - **Created Actionable Intelligence**: Data-driven recommendations for product improvement
 
@@ -104,6 +118,7 @@ This project was undertaken to demonstrate the practical application of advanced
 - **Model Selection**: Transformer-based architecture for superior language understanding
 - **Validation Strategy**: Temporal data splitting to prevent data leakage
 - **Deployment**: Public model hosting for accessibility and reproducibility
+- **Visualization**: Interactive Power BI dashboard for stakeholder insights
 
 ---
 
@@ -122,13 +137,13 @@ This project was undertaken to demonstrate the practical application of advanced
 
 The model achieved exceptional performance on the held-out test set:
 
-| Metric | Score | Industry Context |
-|--------|-------|-----------------|
-| **F1 Micro** | **93.73%** | Excellent for multi-label classification |
-| **F1 Macro** | 62.74% | Strong across diverse categories |
-| **Precision Micro** | 95.36% | High prediction confidence |
-| **Recall Micro** | 92.15% | Comprehensive issue detection |
-| **ROC AUC Micro** | 99.69% | Outstanding discriminative ability |
+| Metric | Score | 
+|--------|-------|
+| **F1 Micro** | **93.73%** | 
+| **F1 Macro** | 62.74% | 
+| **Precision Micro** | 95.36% | 
+| **Recall Micro** | 92.15% | 
+| **ROC AUC Micro** | 99.69% | 
 
 ### Training & Validation
 
@@ -541,6 +556,22 @@ def analyze_with_confidence_levels(reviews):
 - **Performance Metrics**: Multiple evaluation criteria
 - **Threshold Optimization**: ROC analysis for optimal decision boundaries
 
+### Power BI Dashboard Implementation
+
+**Dashboard Features:**
+- **Interactive Visualizations**: Dynamic filtering and drill-down capabilities
+- **Time Series Analysis**: Trend identification across multiple time periods
+- **Category Distribution**: Visual breakdown of review categories
+- **Sentiment Tracking**: Real-time sentiment monitoring
+- **KPI Monitoring**: Key performance indicators at a glance
+- **Custom Filtering**: Filter by date range, category, sentiment, and rating
+
+**Data Integration:**
+- Direct connection to processed review dataset
+- Real-time data refresh capabilities
+- Automated data transformation and cleansing
+- Calculated measures for advanced analytics
+
 ---
 
 ## Results & Insights
@@ -611,23 +642,30 @@ def analyze_with_confidence_levels(reviews):
 3. **Marketing Intelligence**: Campaign effectiveness measurement
 4. **Quality Assurance**: Automated release impact assessment
 
+### Dashboard Enhancements
+
+**Planned Dashboard Features:**
+1. **Predictive Analytics**: Forecast future sentiment trends
+2. **Comparative Benchmarking**: Industry comparison views
+3. **Alert System**: Automated notifications for critical issues
+4. **Custom Report Generation**: Automated executive summaries
+5. **Mobile Dashboard**: Responsive design for mobile access
+
+---
 
 ## Conclusion
 
-This project demonstrates the practical application of NLP techniques to real-world business intelligence challenges. 
-The project provides actionable insights for Moniepoint's customer experience optimization.
+This project demonstrates the practical application of NLP techniques to real-world business intelligence challenges. The project provides actionable insights for Moniepoint's customer experience optimization.
 
 ### Project Significance
 
-This project showcases the intersection of advanced machine learning techniques and practical business applications. The ability to extract meaningful insights from unstructured customer feedback.
+This project showcases the intersection of advanced machine learning techniques and practical business applications. The ability to extract meaningful insights from unstructured customer feedback, combined with interactive visual analytics, provides a comprehensive solution for customer experience management.
 
-**For Moniepoint**: The analysis provides a comprehensive roadmap for addressing customer concerns while leveraging existing competitive advantages.
+**For Moniepoint**: The analysis provides a comprehensive roadmap for addressing customer concerns while leveraging existing competitive advantages. The Power BI dashboard enables stakeholders to monitor key metrics and track improvement initiatives in real-time.
 
 **For the AI Community**: The model serves as a benchmark for multi-label classification in the fintech domain and is freely available for research and commercial applications.
 
 **For Future Applications**: The methodology and tools developed can be adapted for similar customer feedback analysis across various industries and platforms.
-
-
 
 ---
 
@@ -635,8 +673,13 @@ This project showcases the intersection of advanced machine learning techniques 
 
 - 🚀 **Live Demo**: [Interactive Spaces Demo](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
 - 🤗 **Model Repository**: [Hugging Face Model Hub](https://huggingface.co/adeyemi001/Multi-Labelled-Review-Categorization-Model)
+- 📊 **Power BI Dashboard**: [Interactive Analytics Dashboard](https://app.powerbi.com/view?r=eyJrIjoiYjk1YWM3YmYtYWU5ZS00YjIxLWIwMmQtMWI0YjI2ZjQ2MWM3IiwidCI6IjQyOWYxMWVhLWM3NmQtNDczMS05M2M5LWM0MDZiNGYzMmE1YSJ9)
 - 💼 **LinkedIn**: [Adediran Adeyemi](https://www.linkedin.com/in/adediran-adeyemi-17103b114/)
 
 **Project Author**: Adediran Adeyemi  
 **Completion Date**: September 2025  
 **Flask Demo**: Available in project repository
+
+---
+
+*This project is for educational and research purposes. All data was collected from publicly available sources.*
