@@ -4,7 +4,7 @@
 🚀 **Try the model now**: [Interactive Demo on Hugging Face Spaces](https://huggingface.co/spaces/adeyemi001/Multi-Labelled-Review-Categorization-Model)
 
 ## Flask Demo
-![Flask Demo](hf.mp4)
+![Flask Demo](hf.gif)
 
 ## Power BI Dashboard
 📊 **Interactive Analytics Dashboard**: [View Power BI Dashboard](https://app.powerbi.com/view?r=eyJrIjoiYjk1YWM3YmYtYWU5ZS00YjIxLWIwMmQtMWI0YjI2ZjQ2MWM3IiwidCI6IjQyOWYxMWVhLWM3NmQtNDczMS05M2M5LWM0MDZiNGYzMmE1YSJ9)
